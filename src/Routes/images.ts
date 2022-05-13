@@ -10,3 +10,5 @@ const router = express.Router();
 
 // Resize Image Routing
 router.route('/resize').get(resize);
+
+export { router };
