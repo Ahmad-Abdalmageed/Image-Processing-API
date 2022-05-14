@@ -5,14 +5,15 @@
 // Imports
 import express from 'express';
 import { router as images } from './Routes/images';
+import { infoLoggerMW } from './Middlewares/logger';
 
 // Constants and Requires
 const app = express();
 const PORT = 3000;
 
-// Middlewares
+// Routes & Middlewares
+app.use(infoLoggerMW);
 
-// Routes
 app.use('/api/v1/images', images);
 
 // Server
