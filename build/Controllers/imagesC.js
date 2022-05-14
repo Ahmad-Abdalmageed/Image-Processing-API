@@ -67,7 +67,7 @@ var processImage = (0, asyncWrap_1.asyncWrapper)(function (req, res, next) { ret
                 if (!filename)
                     return [2 /*return*/, next(Error('Please Provide a Filename'))];
                 imageType = filename.split('.')[1];
-                newFileName = "".concat(filename.split('.')[0], "_").concat(typeof width === 'undefined' ? '' : width, "_").concat(typeof height === 'undefined' ? '' : height, ".").concat(outFormat ? outFormat : imageType);
+                newFileName = "".concat(filename.split('.')[0], "_").concat(typeof width === 'undefined' ? '' : width, "x").concat(typeof height === 'undefined' ? '' : height, "_").concat(angle == undefined ? '' : 'rot', "_").concat(sigma == undefined ? '' : 'blur', ".").concat(outFormat ? outFormat : imageType);
                 return [4 /*yield*/, (0, sharp_1.default)(path_1.default.join(__dirname, fullDir, filename))];
             case 1:
                 pipeline = _b.sent();
