@@ -4,11 +4,11 @@
 
 // Imports
 import express from 'express';
-import { resize } from '../Controllers/imagesC';
+import { processImage } from '../Controllers/imagesC';
 
 const router = express.Router();
 
 // Resize Image Routing
-router.route('/resize').get(resize);
+router.route('/').get(processImage);
 
 export { router };
