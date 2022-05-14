@@ -8,8 +8,8 @@
     "build": "npx tsc",
     "dist": "node build/app.js",
     "jasmine": "jasmine",
-    "lint": "eslint 'index.js'",
-    "prettier": "prettier --config .prettierrc '*.js' --write",
+    "lint": "eslint \"**/*.ts\" --ignore-pattern node_modules/",
+    "prettier": "prettier --config .prettierrc '**/*.ts' --write",
     "test": "npm run build && npm run jasmine"
   },
   "repository": {
