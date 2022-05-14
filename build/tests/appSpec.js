@@ -82,6 +82,18 @@ describe('Image Processing API EndPoint Testing', function () {
             }
         });
     }); });
+    it('Endpoint Get Response Internal Error', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get('/api/v1/images/?filename=55155.png')];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(500);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     it('Endpoint Returns Error with No Filename', function () { return __awaiter(void 0, void 0, void 0, function () {
         var response;
         return __generator(this, function (_a) {
