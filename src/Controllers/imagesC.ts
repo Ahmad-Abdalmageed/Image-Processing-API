@@ -33,7 +33,6 @@ const processImage = asyncWrapper(
       typeof format == 'undefined'
         ? undefined
         : <sharp.AvailableFormatInfo>(<unknown>format);
-    console.log(outFormat);
     // Filename is undefined
     if (!filename) return next(Error('Please Provide a Filename'));
 
@@ -41,9 +40,9 @@ const processImage = asyncWrapper(
 
     const newFileName = `${(<string>filename).split('.')[0]}_${
       typeof width === 'undefined' ? '' : width
-    }_${typeof height === 'undefined' ? '' : height}.${
-      outFormat ? outFormat : imageType
-    }`;
+    }x${typeof height === 'undefined' ? '' : height}_${
+      angle == undefined ? '' : 'rot'
+    }_${sigma == undefined ? '' : 'blur'}.${outFormat ? outFormat : imageType}`;
 
     //Create a Sharp Object Instance
     const pipeline = await sharp(
