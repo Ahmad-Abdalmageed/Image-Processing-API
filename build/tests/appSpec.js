@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -64,17 +41,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var supertest_1 = __importDefault(require("supertest"));
 var app_1 = require("../app");
-var fs = __importStar(require("fs"));
 var request = (0, supertest_1.default)(app_1.app);
 describe('Image Processing API EndPoint Testing', function () {
     var filename = '557155.png';
-    it('Endpoint Get Response OK ', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('Correct Request to Server is OK', function () { return __awaiter(void 0, void 0, void 0, function () {
         var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    console.log("/api/v1/images/".concat(filename));
-                    return [4 /*yield*/, request.get("/api/v1/images/?filename=".concat(filename))];
+                case 0: return [4 /*yield*/, request.get("/api/v1/images/?filename=".concat(filename))];
                 case 1:
                     response = _a.sent();
                     expect(response.status).toBe(200);
@@ -82,39 +56,31 @@ describe('Image Processing API EndPoint Testing', function () {
             }
         });
     }); });
-    it('Endpoint Get Response Internal Error', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('Non-Existing Request is OK', function () { return __awaiter(void 0, void 0, void 0, function () {
         var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get("/api/v1/")];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toBe(404);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('Passing Wrong/Non Existent Image Return Not Found', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var wrongName, noName;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, request.get('/api/v1/images/?filename=55155.png')];
                 case 1:
-                    response = _a.sent();
-                    expect(response.status).toBe(500);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('Endpoint Returns Error with No Filename', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get("/api/v1/images")];
-                case 1:
-                    response = _a.sent();
-                    expect(response.status).toBe(500);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('Endpoint Saves Output to Thumbs with correct name', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var filename;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/api/v1/images/?width=500&height=200&rotate=180&blur=3&format=jpeg&filename=557155.png')];
-                case 1:
-                    _a.sent();
-                    filename = 'assets/thumbs/557155_500x200_rot_blur.jpeg';
-                    expect(fs.existsSync(filename)).toBeTrue();
+                    wrongName = _a.sent();
+                    return [4 /*yield*/, request.get('/api/v1/images/')];
+                case 2:
+                    noName = _a.sent();
+                    console.log(wrongName.status);
+                    console.log(noName.status);
+                    expect(noName.status == 404 && wrongName.status == 404).toBeTrue();
                     return [2 /*return*/];
             }
         });

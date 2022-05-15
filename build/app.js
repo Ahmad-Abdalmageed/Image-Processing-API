@@ -11,16 +11,17 @@ exports.app = void 0;
 var express_1 = __importDefault(require("express"));
 var images_1 = require("./Routes/images");
 var logger_1 = require("./Middlewares/logger");
-var apicache_1 = __importDefault(require("apicache"));
+var notFound_1 = require("./Middlewares/notFound");
+var errorHandlerMW_1 = require("./Middlewares/errorHandlerMW");
 // Constants and Requires
 var app = (0, express_1.default)();
 exports.app = app;
 var PORT = 3000;
-var cache = apicache_1.default.middleware;
 // Routes & Middlewares
 app.use(logger_1.infoLoggerMW);
-app.use(cache('15 minutes'));
 app.use('/api/v1/images', images_1.router);
+app.use(notFound_1.notFound);
+app.use(errorHandlerMW_1.errorHandlerMW);
 // Server
 var startServer = function (PORT) {
     try {

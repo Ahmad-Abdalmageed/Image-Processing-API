@@ -1,4 +1,7 @@
 "use strict";
+/*
+  Utilities Functionality File
+*/
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,42 +42,52 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processImage = void 0;
+exports.thumbsDir = exports.fullDir = exports.pipeline = void 0;
 var path_1 = __importDefault(require("path"));
-var asyncWrap_1 = require("../Middlewares/asyncWrap");
-var utils_1 = require("./utils");
-var customAPIError_1 = require("../Errors/customAPIError");
+var sharp_1 = __importDefault(require("sharp"));
 var fs_1 = __importDefault(require("fs"));
-// Functions
-function maskQParam(inVar) {
-    return typeof inVar == 'undefined' ? undefined : parseInt(inVar);
-}
-// Resizing Functionality
-var processImage = (0, asyncWrap_1.asyncWrapper)(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, filename, width, height, rotate, blur, format, imageW, imageH, angle, sigma, outFormat, newImgName;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _a = req.query, filename = _a.filename, width = _a.width, height = _a.height, rotate = _a.rotate, blur = _a.blur, format = _a.format;
-                imageW = maskQParam(width);
-                imageH = maskQParam(height);
-                angle = maskQParam(rotate);
-                sigma = maskQParam(blur);
-                outFormat = typeof format == 'undefined'
-                    ? undefined
-                    : format;
-                // Filename is undefined
-                if (!filename)
-                    return [2 /*return*/, next((0, customAPIError_1.createCustomAPIError)('Image Filename was not Specified', 404))];
-                // Path Passed in not Correct
-                if (!fs_1.default.existsSync(path_1.default.join(__dirname, utils_1.fullDir, filename)))
-                    return [2 /*return*/, next((0, customAPIError_1.createCustomAPIError)('Wrong Image Filename or Does not Exist', 404))];
-                return [4 /*yield*/, (0, utils_1.pipeline)(filename, imageW, imageH, angle, sigma, outFormat)];
-            case 1:
-                newImgName = _b.sent();
-                res.sendFile(path_1.default.join(__dirname, utils_1.thumbsDir, newImgName));
-                return [2 /*return*/];
-        }
+// Constants
+var fullDir = '../../assets/full/';
+exports.fullDir = fullDir;
+var thumbsDir = '../../assets/thumbs/';
+exports.thumbsDir = thumbsDir;
+// Check Folders Sanity
+if (!fs_1.default.existsSync(path_1.default.join(__dirname, thumbsDir))) {
+    fs_1.default.mkdir(path_1.default.join(__dirname, thumbsDir), function (err) {
+        if (err)
+            return console.log(err);
+        console.log('Thumbs Dir Created');
     });
-}); });
-exports.processImage = processImage;
+}
+var pipeline = function (imgName, imgW, imgH, angle, sigma, format) {
+    if (format === void 0) { format = undefined; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var imgFormat, newImgName, pipeline;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    imgFormat = imgName.split('.')[1];
+                    newImgName = "".concat(imgName.split('.')[0], "_").concat(typeof imgW == 'undefined' ? '' : imgW, "x").concat(typeof imgH === 'undefined' ? '' : imgH, "_").concat(angle == undefined ? '' : angle, "_").concat(sigma == undefined ? '' : sigma, ".").concat(format ? '' : imgFormat);
+                    // If Image Already Exists
+                    if (fs_1.default.existsSync(path_1.default.join(__dirname, thumbsDir, newImgName)))
+                        return [2 /*return*/, newImgName];
+                    return [4 /*yield*/, (0, sharp_1.default)(path_1.default.join(__dirname, fullDir, imgName))];
+                case 1:
+                    pipeline = _a.sent();
+                    //Start the Processing Pipeline
+                    pipeline.resize(imgW, imgH);
+                    if (angle)
+                        pipeline.rotate(angle);
+                    if (sigma)
+                        pipeline.blur(sigma);
+                    if (format)
+                        pipeline.toFormat(format);
+                    return [4 /*yield*/, pipeline.toFile(path_1.default.join(__dirname, thumbsDir, newImgName))];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/, newImgName];
+            }
+        });
+    });
+};
+exports.pipeline = pipeline;
