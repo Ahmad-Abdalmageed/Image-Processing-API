@@ -9,11 +9,13 @@ function errorHandlerMW(
 ) {
   // Check if Error is a CustomAPIError
   if (err instanceof CustomAPIError) {
-    return res.status(err.statusCode).send(err.message);
+    res.status(err.statusCode).send(err.msg);
+    next();
+  } else {
+    // Other Server Errors that might be unhandled
+    res.status(500).send(err.message);
+    next();
   }
-  // Other Server Errors that might be unhandled
-  res.status(500).send(err.message);
-  next();
 }
 
 export { errorHandlerMW };
