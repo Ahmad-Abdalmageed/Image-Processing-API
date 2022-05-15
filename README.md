@@ -69,18 +69,6 @@ The Second image shows the resulted processed image saved into its path in `asse
 
 ![image-20220515145440391](./assets/images/2.png)
 
-## Optimizations
-
-An ordinary request takes about 200 ms Response time which includes processing and saving into `./assets/thumbs`
-on a bigger Pipeline this would be troublesome so Caching is used to save some time.
-
-There are multiple Caching Middle-ware scattered along the NPM Libraries, The Middle ware used here
-is one of the simple ones:
-
--     `"apicache": "^1.6.3"`
-
-This package requires only Importing and you're good to go, Response times improved for multiple requests on the same images ( about 4 -5 ms).
-
 ## Run Locally
 
 The API was built using Typescript and Express.js, all working versions are included in `package.json` with uploaded
