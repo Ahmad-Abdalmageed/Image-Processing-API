@@ -33,8 +33,8 @@ const pipeline = async (
   const newImgName = `${imgName.split('.')[0]}_${
     typeof imgW == 'undefined' ? '' : imgW
   }x${typeof imgH === 'undefined' ? '' : imgH}_${
-    angle == undefined ? '' : 'rot'
-  }_${sigma == undefined ? '' : 'blur'}.${format ? '' : imgFormat}`;
+    angle == undefined ? '' : angle
+  }_${sigma == undefined ? '' : sigma}.${format ? '' : imgFormat}`;
 
   // If Image Already Exists
   if (fs.existsSync(path.join(__dirname, thumbsDir, newImgName)))
