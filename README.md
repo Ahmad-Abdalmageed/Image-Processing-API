@@ -18,7 +18,7 @@ There are two ways to use this API, it makes it easier for developers who are bu
 | `filename` | `string` | **Required**. Image Filename in assets/full |
 | `width`    | `string` | New Image Width                             |
 | `height`   | `string` | New Image height                            |
-| `format`   | string   | Transforming to different image format      |
+| `format`   | `string`   | Transforming to different image format      |
 
 - Leaving both `width` & `height` will produce the same input image,
 - Leaving `format` empty will save the image with its original format
